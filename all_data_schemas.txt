@@ -1,0 +1,76 @@
+Schema for file: radiology
+StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('note_type', StringType(), True), StructField('note_seq', StringType(), True), StructField('charttime', StringType(), True), StructField('storetime', StringType(), True), StructField('text', StringType(), True)])
+
+----------------------------
+Schema for file: d_hcpcs
+StructType([StructField('code', StringType(), True), StructField('category', StringType(), True), StructField('long_description', StringType(), True), StructField('short_description', StringType(), True)])
+
+----------------------------
+Schema for file: patients
+StructType([StructField('subject_id', StringType(), True), StructField('gender', StringType(), True), StructField('anchor_age', StringType(), True), StructField('anchor_year', StringType(), True), StructField('anchor_year_group', StringType(), True), StructField('dod', StringType(), True)])
+
+----------------------------
+Schema for file: diagnoses_icd
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('seq_num', StringType(), True), StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True)])
+
+----------------------------
+Schema for file: discharge
+StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('note_type', StringType(), True), StructField('note_seq', StringType(), True), StructField('charttime', StringType(), True), StructField('storetime', StringType(), True), StructField('text', StringType(), True)])
+
+----------------------------
+Schema for file: emar_detail
+StructType([StructField('subject_id', StringType(), True), StructField('emar_id', StringType(), True), StructField('emar_seq', StringType(), True), StructField('parent_field_ordinal', StringType(), True), StructField('administration_type', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('barcode_type', StringType(), True), StructField('reason_for_no_barcode', StringType(), True), StructField('complete_dose_not_given', StringType(), True), StructField('dose_due', StringType(), True), StructField('dose_due_unit', StringType(), True), StructField('dose_given', StringType(), True), StructField('dose_given_unit', StringType(), True), StructField('will_remainder_of_dose_be_given', StringType(), True), StructField('product_amount_given', StringType(), True), StructField('product_unit', StringType(), True), StructField('product_code', StringType(), True), StructField('product_description', StringType(), True), StructField('product_description_other', StringType(), True), StructField('prior_infusion_rate', StringType(), True), StructField('infusion_rate', StringType(), True), StructField('infusion_rate_adjustment', StringType(), True), StructField('infusion_rate_adjustment_amount', StringType(), True), StructField('infusion_rate_unit', StringType(), True), StructField('route', StringType(), True), StructField('infusion_complete', StringType(), True), StructField('completion_interval', StringType(), True), StructField('new_iv_bag_hung', StringType(), True), StructField('continued_infusion_in_other_location', StringType(), True), StructField('restart_interval', StringType(), True), StructField('side', StringType(), True), StructField('site', StringType(), True), StructField('non_formulary_visual_verification', StringType(), True)])
+
+----------------------------
+Schema for file: prescriptions
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('poe_id', StringType(), True), StructField('poe_seq', StringType(), True), StructField('order_provider_id', StringType(), True), StructField('starttime', StringType(), True), StructField('stoptime', StringType(), True), StructField('drug_type', StringType(), True), StructField('drug', StringType(), True), StructField('formulary_drug_cd', StringType(), True), StructField('gsn', StringType(), True), StructField('ndc', StringType(), True), StructField('prod_strength', StringType(), True), StructField('form_rx', StringType(), True), StructField('dose_val_rx', StringType(), True), StructField('dose_unit_rx', StringType(), True), StructField('form_val_disp', StringType(), True), StructField('form_unit_disp', StringType(), True), StructField('doses_per_24_hrs', StringType(), True), StructField('route', StringType(), True)])
+
+----------------------------
+Schema for file: drgcodes
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('drg_type', StringType(), True), StructField('drg_code', StringType(), True), StructField('description', StringType(), True), StructField('drg_severity', StringType(), True), StructField('drg_mortality', StringType(), True)])
+
+----------------------------
+Schema for file: d_icd_diagnoses
+StructType([StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True), StructField('long_title', StringType(), True)])
+
+----------------------------
+Schema for file: d_labitems
+StructType([StructField('itemid', StringType(), True), StructField('label', StringType(), True), StructField('fluid', StringType(), True), StructField('category', StringType(), True)])
+
+----------------------------
+Schema for file: discharge_detail
+StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('field_name', StringType(), True), StructField('field_value', StringType(), True), StructField('field_ordinal', StringType(), True)])
+
+----------------------------
+Schema for file: pharmacy
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('poe_id', StringType(), True), StructField('starttime', StringType(), True), StructField('stoptime', StringType(), True), StructField('medication', StringType(), True), StructField('proc_type', StringType(), True), StructField('status', StringType(), True), StructField('entertime', StringType(), True), StructField('verifiedtime', StringType(), True), StructField('route', StringType(), True), StructField('frequency', StringType(), True), StructField('disp_sched', StringType(), True), StructField('infusion_type', StringType(), True), StructField('sliding_scale', StringType(), True), StructField('lockout_interval', StringType(), True), StructField('basal_rate', StringType(), True), StructField('one_hr_max', StringType(), True), StructField('doses_per_24_hrs', StringType(), True), StructField('duration', StringType(), True), StructField('duration_interval', StringType(), True), StructField('expiration_value', StringType(), True), StructField('expiration_unit', StringType(), True), StructField('expirationdate', StringType(), True), StructField('dispensation', StringType(), True), StructField('fill_quantity', StringType(), True)])
+
+----------------------------
+Schema for file: procedures_icd
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('seq_num', StringType(), True), StructField('chartdate', StringType(), True), StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True)])
+
+----------------------------
+Schema for file: hcpcsevents
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('hcpcs_cd', StringType(), True), StructField('seq_num', StringType(), True), StructField('short_description', StringType(), True)])
+
+----------------------------
+Schema for file: radiology_detail
+StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('field_name', StringType(), True), StructField('field_value', StringType(), True), StructField('field_ordinal', StringType(), True)])
+
+----------------------------
+Schema for file: d_icd_procedures
+StructType([StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True), StructField('long_title', StringType(), True)])
+
+----------------------------
+Schema for file: omr
+StructType([StructField('subject_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('seq_num', StringType(), True), StructField('result_name', StringType(), True), StructField('result_value', StringType(), True)])
+
+----------------------------
+Schema for file: emar
+StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('emar_id', StringType(), True), StructField('emar_seq', StringType(), True), StructField('poe_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('enter_provider_id', StringType(), True), StructField('charttime', StringType(), True), StructField('medication', StringType(), True), StructField('event_txt', StringType(), True), StructField('scheduletime', StringType(), True), StructField('storetime', StringType(), True)])
+
+----------------------------
+Schema for file: microbiologyevents
+StructType([StructField('microevent_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('micro_specimen_id', StringType(), True), StructField('order_provider_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('charttime', StringType(), True), StructField('spec_itemid', StringType(), True), StructField('spec_type_desc', StringType(), True), StructField('test_seq', StringType(), True), StructField('storedate', StringType(), True), StructField('storetime', StringType(), True), StructField('test_itemid', StringType(), True), StructField('test_name', StringType(), True), StructField('org_itemid', StringType(), True), StructField('org_name', StringType(), True), StructField('isolate_num', StringType(), True), StructField('quantity', StringType(), True), StructField('ab_itemid', StringType(), True), StructField('ab_name', StringType(), True), StructField('dilution_text', StringType(), True), StructField('dilution_comparison', StringType(), True), StructField('dilution_value', StringType(), True), StructField('interpretation', StringType(), True), StructField('comments', StringType(), True)])
+
+----------------------------
