@@ -1,2 +1,5 @@
 data/*
+parquet_files/*
 .DS_Store
+data.zip
+*.zip

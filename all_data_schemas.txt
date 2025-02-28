@@ -1,76 +1,269 @@
 Schema for file: radiology
-StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('note_type', StringType(), True), StructField('note_seq', StringType(), True), StructField('charttime', StringType(), True), StructField('storetime', StringType(), True), StructField('text', StringType(), True)])
+root
+ |-- note_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- note_type: string (nullable = true)
+ |-- note_seq: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- storetime: string (nullable = true)
+ |-- text: string (nullable = true)
 
 ----------------------------
 Schema for file: d_hcpcs
-StructType([StructField('code', StringType(), True), StructField('category', StringType(), True), StructField('long_description', StringType(), True), StructField('short_description', StringType(), True)])
+root
+ |-- code: string (nullable = true)
+ |-- category: string (nullable = true)
+ |-- long_description: string (nullable = true)
+ |-- short_description: string (nullable = true)
 
 ----------------------------
 Schema for file: patients
-StructType([StructField('subject_id', StringType(), True), StructField('gender', StringType(), True), StructField('anchor_age', StringType(), True), StructField('anchor_year', StringType(), True), StructField('anchor_year_group', StringType(), True), StructField('dod', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- gender: string (nullable = true)
+ |-- anchor_age: string (nullable = true)
+ |-- anchor_year: string (nullable = true)
+ |-- anchor_year_group: string (nullable = true)
+ |-- dod: string (nullable = true)
 
 ----------------------------
 Schema for file: diagnoses_icd
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('seq_num', StringType(), True), StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
 
 ----------------------------
 Schema for file: discharge
-StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('note_type', StringType(), True), StructField('note_seq', StringType(), True), StructField('charttime', StringType(), True), StructField('storetime', StringType(), True), StructField('text', StringType(), True)])
+root
+ |-- note_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- note_type: string (nullable = true)
+ |-- note_seq: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- storetime: string (nullable = true)
+ |-- text: string (nullable = true)
 
 ----------------------------
 Schema for file: emar_detail
-StructType([StructField('subject_id', StringType(), True), StructField('emar_id', StringType(), True), StructField('emar_seq', StringType(), True), StructField('parent_field_ordinal', StringType(), True), StructField('administration_type', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('barcode_type', StringType(), True), StructField('reason_for_no_barcode', StringType(), True), StructField('complete_dose_not_given', StringType(), True), StructField('dose_due', StringType(), True), StructField('dose_due_unit', StringType(), True), StructField('dose_given', StringType(), True), StructField('dose_given_unit', StringType(), True), StructField('will_remainder_of_dose_be_given', StringType(), True), StructField('product_amount_given', StringType(), True), StructField('product_unit', StringType(), True), StructField('product_code', StringType(), True), StructField('product_description', StringType(), True), StructField('product_description_other', StringType(), True), StructField('prior_infusion_rate', StringType(), True), StructField('infusion_rate', StringType(), True), StructField('infusion_rate_adjustment', StringType(), True), StructField('infusion_rate_adjustment_amount', StringType(), True), StructField('infusion_rate_unit', StringType(), True), StructField('route', StringType(), True), StructField('infusion_complete', StringType(), True), StructField('completion_interval', StringType(), True), StructField('new_iv_bag_hung', StringType(), True), StructField('continued_infusion_in_other_location', StringType(), True), StructField('restart_interval', StringType(), True), StructField('side', StringType(), True), StructField('site', StringType(), True), StructField('non_formulary_visual_verification', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- emar_id: string (nullable = true)
+ |-- emar_seq: string (nullable = true)
+ |-- parent_field_ordinal: string (nullable = true)
+ |-- administration_type: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- barcode_type: string (nullable = true)
+ |-- reason_for_no_barcode: string (nullable = true)
+ |-- complete_dose_not_given: string (nullable = true)
+ |-- dose_due: string (nullable = true)
+ |-- dose_due_unit: string (nullable = true)
+ |-- dose_given: string (nullable = true)
+ |-- dose_given_unit: string (nullable = true)
+ |-- will_remainder_of_dose_be_given: string (nullable = true)
+ |-- product_amount_given: string (nullable = true)
+ |-- product_unit: string (nullable = true)
+ |-- product_code: string (nullable = true)
+ |-- product_description: string (nullable = true)
+ |-- product_description_other: string (nullable = true)
+ |-- prior_infusion_rate: string (nullable = true)
+ |-- infusion_rate: string (nullable = true)
+ |-- infusion_rate_adjustment: string (nullable = true)
+ |-- infusion_rate_adjustment_amount: string (nullable = true)
+ |-- infusion_rate_unit: string (nullable = true)
+ |-- route: string (nullable = true)
+ |-- infusion_complete: string (nullable = true)
+ |-- completion_interval: string (nullable = true)
+ |-- new_iv_bag_hung: string (nullable = true)
+ |-- continued_infusion_in_other_location: string (nullable = true)
+ |-- restart_interval: string (nullable = true)
+ |-- side: string (nullable = true)
+ |-- site: string (nullable = true)
+ |-- non_formulary_visual_verification: string (nullable = true)
 
 ----------------------------
 Schema for file: prescriptions
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('poe_id', StringType(), True), StructField('poe_seq', StringType(), True), StructField('order_provider_id', StringType(), True), StructField('starttime', StringType(), True), StructField('stoptime', StringType(), True), StructField('drug_type', StringType(), True), StructField('drug', StringType(), True), StructField('formulary_drug_cd', StringType(), True), StructField('gsn', StringType(), True), StructField('ndc', StringType(), True), StructField('prod_strength', StringType(), True), StructField('form_rx', StringType(), True), StructField('dose_val_rx', StringType(), True), StructField('dose_unit_rx', StringType(), True), StructField('form_val_disp', StringType(), True), StructField('form_unit_disp', StringType(), True), StructField('doses_per_24_hrs', StringType(), True), StructField('route', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- poe_id: string (nullable = true)
+ |-- poe_seq: string (nullable = true)
+ |-- order_provider_id: string (nullable = true)
+ |-- starttime: string (nullable = true)
+ |-- stoptime: string (nullable = true)
+ |-- drug_type: string (nullable = true)
+ |-- drug: string (nullable = true)
+ |-- formulary_drug_cd: string (nullable = true)
+ |-- gsn: string (nullable = true)
+ |-- ndc: string (nullable = true)
+ |-- prod_strength: string (nullable = true)
+ |-- form_rx: string (nullable = true)
+ |-- dose_val_rx: string (nullable = true)
+ |-- dose_unit_rx: string (nullable = true)
+ |-- form_val_disp: string (nullable = true)
+ |-- form_unit_disp: string (nullable = true)
+ |-- doses_per_24_hrs: string (nullable = true)
+ |-- route: string (nullable = true)
 
 ----------------------------
 Schema for file: drgcodes
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('drg_type', StringType(), True), StructField('drg_code', StringType(), True), StructField('description', StringType(), True), StructField('drg_severity', StringType(), True), StructField('drg_mortality', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- drg_type: string (nullable = true)
+ |-- drg_code: string (nullable = true)
+ |-- description: string (nullable = true)
+ |-- drg_severity: string (nullable = true)
+ |-- drg_mortality: string (nullable = true)
 
 ----------------------------
 Schema for file: d_icd_diagnoses
-StructType([StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True), StructField('long_title', StringType(), True)])
+root
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
+ |-- long_title: string (nullable = true)
 
 ----------------------------
 Schema for file: d_labitems
-StructType([StructField('itemid', StringType(), True), StructField('label', StringType(), True), StructField('fluid', StringType(), True), StructField('category', StringType(), True)])
+root
+ |-- itemid: string (nullable = true)
+ |-- label: string (nullable = true)
+ |-- fluid: string (nullable = true)
+ |-- category: string (nullable = true)
 
 ----------------------------
 Schema for file: discharge_detail
-StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('field_name', StringType(), True), StructField('field_value', StringType(), True), StructField('field_ordinal', StringType(), True)])
+root
+ |-- note_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- field_name: string (nullable = true)
+ |-- field_value: string (nullable = true)
+ |-- field_ordinal: string (nullable = true)
 
 ----------------------------
 Schema for file: pharmacy
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('poe_id', StringType(), True), StructField('starttime', StringType(), True), StructField('stoptime', StringType(), True), StructField('medication', StringType(), True), StructField('proc_type', StringType(), True), StructField('status', StringType(), True), StructField('entertime', StringType(), True), StructField('verifiedtime', StringType(), True), StructField('route', StringType(), True), StructField('frequency', StringType(), True), StructField('disp_sched', StringType(), True), StructField('infusion_type', StringType(), True), StructField('sliding_scale', StringType(), True), StructField('lockout_interval', StringType(), True), StructField('basal_rate', StringType(), True), StructField('one_hr_max', StringType(), True), StructField('doses_per_24_hrs', StringType(), True), StructField('duration', StringType(), True), StructField('duration_interval', StringType(), True), StructField('expiration_value', StringType(), True), StructField('expiration_unit', StringType(), True), StructField('expirationdate', StringType(), True), StructField('dispensation', StringType(), True), StructField('fill_quantity', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- poe_id: string (nullable = true)
+ |-- starttime: string (nullable = true)
+ |-- stoptime: string (nullable = true)
+ |-- medication: string (nullable = true)
+ |-- proc_type: string (nullable = true)
+ |-- status: string (nullable = true)
+ |-- entertime: string (nullable = true)
+ |-- verifiedtime: string (nullable = true)
+ |-- route: string (nullable = true)
+ |-- frequency: string (nullable = true)
+ |-- disp_sched: string (nullable = true)
+ |-- infusion_type: string (nullable = true)
+ |-- sliding_scale: string (nullable = true)
+ |-- lockout_interval: string (nullable = true)
+ |-- basal_rate: string (nullable = true)
+ |-- one_hr_max: string (nullable = true)
+ |-- doses_per_24_hrs: string (nullable = true)
+ |-- duration: string (nullable = true)
+ |-- duration_interval: string (nullable = true)
+ |-- expiration_value: string (nullable = true)
+ |-- expiration_unit: string (nullable = true)
+ |-- expirationdate: string (nullable = true)
+ |-- dispensation: string (nullable = true)
+ |-- fill_quantity: string (nullable = true)
 
 ----------------------------
 Schema for file: procedures_icd
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('seq_num', StringType(), True), StructField('chartdate', StringType(), True), StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
 
 ----------------------------
 Schema for file: hcpcsevents
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('hcpcs_cd', StringType(), True), StructField('seq_num', StringType(), True), StructField('short_description', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- hcpcs_cd: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- short_description: string (nullable = true)
 
 ----------------------------
 Schema for file: radiology_detail
-StructType([StructField('note_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('field_name', StringType(), True), StructField('field_value', StringType(), True), StructField('field_ordinal', StringType(), True)])
+root
+ |-- note_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- field_name: string (nullable = true)
+ |-- field_value: string (nullable = true)
+ |-- field_ordinal: string (nullable = true)
 
 ----------------------------
 Schema for file: d_icd_procedures
-StructType([StructField('icd_code', StringType(), True), StructField('icd_version', StringType(), True), StructField('long_title', StringType(), True)])
+root
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
+ |-- long_title: string (nullable = true)
 
 ----------------------------
 Schema for file: omr
-StructType([StructField('subject_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('seq_num', StringType(), True), StructField('result_name', StringType(), True), StructField('result_value', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- result_name: string (nullable = true)
+ |-- result_value: string (nullable = true)
 
 ----------------------------
 Schema for file: emar
-StructType([StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('emar_id', StringType(), True), StructField('emar_seq', StringType(), True), StructField('poe_id', StringType(), True), StructField('pharmacy_id', StringType(), True), StructField('enter_provider_id', StringType(), True), StructField('charttime', StringType(), True), StructField('medication', StringType(), True), StructField('event_txt', StringType(), True), StructField('scheduletime', StringType(), True), StructField('storetime', StringType(), True)])
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- emar_id: string (nullable = true)
+ |-- emar_seq: string (nullable = true)
+ |-- poe_id: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- enter_provider_id: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- medication: string (nullable = true)
+ |-- event_txt: string (nullable = true)
+ |-- scheduletime: string (nullable = true)
+ |-- storetime: string (nullable = true)
 
 ----------------------------
 Schema for file: microbiologyevents
-StructType([StructField('microevent_id', StringType(), True), StructField('subject_id', StringType(), True), StructField('hadm_id', StringType(), True), StructField('micro_specimen_id', StringType(), True), StructField('order_provider_id', StringType(), True), StructField('chartdate', StringType(), True), StructField('charttime', StringType(), True), StructField('spec_itemid', StringType(), True), StructField('spec_type_desc', StringType(), True), StructField('test_seq', StringType(), True), StructField('storedate', StringType(), True), StructField('storetime', StringType(), True), StructField('test_itemid', StringType(), True), StructField('test_name', StringType(), True), StructField('org_itemid', StringType(), True), StructField('org_name', StringType(), True), StructField('isolate_num', StringType(), True), StructField('quantity', StringType(), True), StructField('ab_itemid', StringType(), True), StructField('ab_name', StringType(), True), StructField('dilution_text', StringType(), True), StructField('dilution_comparison', StringType(), True), StructField('dilution_value', StringType(), True), StructField('interpretation', StringType(), True), StructField('comments', StringType(), True)])
+root
+ |-- microevent_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- micro_specimen_id: string (nullable = true)
+ |-- order_provider_id: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- spec_itemid: string (nullable = true)
+ |-- spec_type_desc: string (nullable = true)
+ |-- test_seq: string (nullable = true)
+ |-- storedate: string (nullable = true)
+ |-- storetime: string (nullable = true)
+ |-- test_itemid: string (nullable = true)
+ |-- test_name: string (nullable = true)
+ |-- org_itemid: string (nullable = true)
+ |-- org_name: string (nullable = true)
+ |-- isolate_num: string (nullable = true)
+ |-- quantity: string (nullable = true)
+ |-- ab_itemid: string (nullable = true)
+ |-- ab_name: string (nullable = true)
+ |-- dilution_text: string (nullable = true)
+ |-- dilution_comparison: string (nullable = true)
+ |-- dilution_value: string (nullable = true)
+ |-- interpretation: string (nullable = true)
+ |-- comments: string (nullable = true)
 
 ----------------------------
