@@ -1,34 +1,4 @@
-Schema for file: radiology
-root
- |-- note_id: string (nullable = true)
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- note_type: string (nullable = true)
- |-- note_seq: string (nullable = true)
- |-- charttime: string (nullable = true)
- |-- storetime: string (nullable = true)
- |-- text: string (nullable = true)
-
-----------------------------
-Schema for file: d_hcpcs
-root
- |-- code: string (nullable = true)
- |-- category: string (nullable = true)
- |-- long_description: string (nullable = true)
- |-- short_description: string (nullable = true)
-
-----------------------------
-Schema for file: patients
-root
- |-- subject_id: string (nullable = true)
- |-- gender: string (nullable = true)
- |-- anchor_age: string (nullable = true)
- |-- anchor_year: string (nullable = true)
- |-- anchor_year_group: string (nullable = true)
- |-- dod: string (nullable = true)
-
-----------------------------
-Schema for file: diagnoses_icd
+Schema for file: cleaned_data\diagnoses_icd
 root
  |-- subject_id: string (nullable = true)
  |-- hadm_id: string (nullable = true)
@@ -37,7 +7,7 @@ root
  |-- icd_version: string (nullable = true)
 
 ----------------------------
-Schema for file: discharge
+Schema for file: cleaned_data\discharge
 root
  |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
@@ -49,7 +19,73 @@ root
  |-- text: string (nullable = true)
 
 ----------------------------
-Schema for file: emar_detail
+Schema for file: cleaned_data\discharge_detail
+root
+ |-- note_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- field_name: string (nullable = true)
+ |-- field_value: string (nullable = true)
+ |-- field_ordinal: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\drgcodes
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- drg_type: string (nullable = true)
+ |-- drg_code: string (nullable = true)
+ |-- description: string (nullable = true)
+ |-- drg_severity: string (nullable = true)
+ |-- drg_mortality: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\d_hcpcs
+root
+ |-- code: string (nullable = true)
+ |-- category: string (nullable = true)
+ |-- long_description: string (nullable = true)
+ |-- short_description: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\d_icd_diagnoses
+root
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
+ |-- long_title: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\d_icd_procedures
+root
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: string (nullable = true)
+ |-- long_title: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\d_labitems
+root
+ |-- itemid: string (nullable = true)
+ |-- label: string (nullable = true)
+ |-- fluid: string (nullable = true)
+ |-- category: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\emar
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- emar_id: string (nullable = true)
+ |-- emar_seq: string (nullable = true)
+ |-- poe_id: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- enter_provider_id: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- medication: string (nullable = true)
+ |-- event_txt: string (nullable = true)
+ |-- scheduletime: string (nullable = true)
+ |-- storetime: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\emar_detail
 root
  |-- subject_id: string (nullable = true)
  |-- emar_id: string (nullable = true)
@@ -86,67 +122,65 @@ root
  |-- non_formulary_visual_verification: string (nullable = true)
 
 ----------------------------
-Schema for file: prescriptions
+Schema for file: cleaned_data\hcpcsevents
 root
  |-- subject_id: string (nullable = true)
  |-- hadm_id: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
- |-- poe_id: string (nullable = true)
- |-- poe_seq: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- hcpcs_cd: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- short_description: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\microbiologyevents
+root
+ |-- microevent_id: string (nullable = true)
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- micro_specimen_id: string (nullable = true)
  |-- order_provider_id: string (nullable = true)
- |-- starttime: string (nullable = true)
- |-- stoptime: string (nullable = true)
- |-- drug_type: string (nullable = true)
- |-- drug: string (nullable = true)
- |-- formulary_drug_cd: string (nullable = true)
- |-- gsn: string (nullable = true)
- |-- ndc: string (nullable = true)
- |-- prod_strength: string (nullable = true)
- |-- form_rx: string (nullable = true)
- |-- dose_val_rx: string (nullable = true)
- |-- dose_unit_rx: string (nullable = true)
- |-- form_val_disp: string (nullable = true)
- |-- form_unit_disp: string (nullable = true)
- |-- doses_per_24_hrs: string (nullable = true)
- |-- route: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- spec_itemid: string (nullable = true)
+ |-- spec_type_desc: string (nullable = true)
+ |-- test_seq: string (nullable = true)
+ |-- storedate: string (nullable = true)
+ |-- storetime: string (nullable = true)
+ |-- test_itemid: string (nullable = true)
+ |-- test_name: string (nullable = true)
+ |-- org_itemid: string (nullable = true)
+ |-- org_name: string (nullable = true)
+ |-- isolate_num: string (nullable = true)
+ |-- quantity: string (nullable = true)
+ |-- ab_itemid: string (nullable = true)
+ |-- ab_name: string (nullable = true)
+ |-- dilution_text: string (nullable = true)
+ |-- dilution_comparison: string (nullable = true)
+ |-- dilution_value: string (nullable = true)
+ |-- interpretation: string (nullable = true)
+ |-- comments: string (nullable = true)
 
 ----------------------------
-Schema for file: drgcodes
+Schema for file: cleaned_data\omr
 root
  |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- drg_type: string (nullable = true)
- |-- drg_code: string (nullable = true)
- |-- description: string (nullable = true)
- |-- drg_severity: string (nullable = true)
- |-- drg_mortality: string (nullable = true)
+ |-- chartdate: string (nullable = true)
+ |-- seq_num: string (nullable = true)
+ |-- result_name: string (nullable = true)
+ |-- result_value: string (nullable = true)
 
 ----------------------------
-Schema for file: d_icd_diagnoses
+Schema for file: cleaned_data\patients
 root
- |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
- |-- long_title: string (nullable = true)
-
-----------------------------
-Schema for file: d_labitems
-root
- |-- itemid: string (nullable = true)
- |-- label: string (nullable = true)
- |-- fluid: string (nullable = true)
- |-- category: string (nullable = true)
-
-----------------------------
-Schema for file: discharge_detail
-root
- |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
- |-- field_name: string (nullable = true)
- |-- field_value: string (nullable = true)
- |-- field_ordinal: string (nullable = true)
+ |-- gender: string (nullable = true)
+ |-- anchor_age: string (nullable = true)
+ |-- anchor_year: string (nullable = true)
+ |-- anchor_year_group: string (nullable = true)
+ |-- dod: string (nullable = true)
 
 ----------------------------
-Schema for file: pharmacy
+Schema for file: cleaned_data\pharmacy
 root
  |-- subject_id: string (nullable = true)
  |-- hadm_id: string (nullable = true)
@@ -177,7 +211,32 @@ root
  |-- fill_quantity: string (nullable = true)
 
 ----------------------------
-Schema for file: procedures_icd
+Schema for file: cleaned_data\prescriptions
+root
+ |-- subject_id: string (nullable = true)
+ |-- hadm_id: string (nullable = true)
+ |-- pharmacy_id: string (nullable = true)
+ |-- poe_id: string (nullable = true)
+ |-- poe_seq: string (nullable = true)
+ |-- order_provider_id: string (nullable = true)
+ |-- starttime: string (nullable = true)
+ |-- stoptime: string (nullable = true)
+ |-- drug_type: string (nullable = true)
+ |-- drug: string (nullable = true)
+ |-- formulary_drug_cd: string (nullable = true)
+ |-- gsn: string (nullable = true)
+ |-- ndc: string (nullable = true)
+ |-- prod_strength: string (nullable = true)
+ |-- form_rx: string (nullable = true)
+ |-- dose_val_rx: string (nullable = true)
+ |-- dose_unit_rx: string (nullable = true)
+ |-- form_val_disp: string (nullable = true)
+ |-- form_unit_disp: string (nullable = true)
+ |-- doses_per_24_hrs: string (nullable = true)
+ |-- route: string (nullable = true)
+
+----------------------------
+Schema for file: cleaned_data\procedures_icd
 root
  |-- subject_id: string (nullable = true)
  |-- hadm_id: string (nullable = true)
@@ -187,83 +246,24 @@ root
  |-- icd_version: string (nullable = true)
 
 ----------------------------
-Schema for file: hcpcsevents
+Schema for file: cleaned_data\radiology
 root
+ |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
  |-- hadm_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
- |-- hcpcs_cd: string (nullable = true)
- |-- seq_num: string (nullable = true)
- |-- short_description: string (nullable = true)
+ |-- note_type: string (nullable = true)
+ |-- note_seq: string (nullable = true)
+ |-- charttime: string (nullable = true)
+ |-- storetime: string (nullable = true)
+ |-- text: string (nullable = true)
 
 ----------------------------
-Schema for file: radiology_detail
+Schema for file: cleaned_data\radiology_detail
 root
  |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
  |-- field_name: string (nullable = true)
  |-- field_value: string (nullable = true)
  |-- field_ordinal: string (nullable = true)
-
-----------------------------
-Schema for file: d_icd_procedures
-root
- |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
- |-- long_title: string (nullable = true)
-
-----------------------------
-Schema for file: omr
-root
- |-- subject_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
- |-- seq_num: string (nullable = true)
- |-- result_name: string (nullable = true)
- |-- result_value: string (nullable = true)
-
-----------------------------
-Schema for file: emar
-root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- emar_id: string (nullable = true)
- |-- emar_seq: string (nullable = true)
- |-- poe_id: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
- |-- enter_provider_id: string (nullable = true)
- |-- charttime: string (nullable = true)
- |-- medication: string (nullable = true)
- |-- event_txt: string (nullable = true)
- |-- scheduletime: string (nullable = true)
- |-- storetime: string (nullable = true)
-
-----------------------------
-Schema for file: microbiologyevents
-root
- |-- microevent_id: string (nullable = true)
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- micro_specimen_id: string (nullable = true)
- |-- order_provider_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
- |-- charttime: string (nullable = true)
- |-- spec_itemid: string (nullable = true)
- |-- spec_type_desc: string (nullable = true)
- |-- test_seq: string (nullable = true)
- |-- storedate: string (nullable = true)
- |-- storetime: string (nullable = true)
- |-- test_itemid: string (nullable = true)
- |-- test_name: string (nullable = true)
- |-- org_itemid: string (nullable = true)
- |-- org_name: string (nullable = true)
- |-- isolate_num: string (nullable = true)
- |-- quantity: string (nullable = true)
- |-- ab_itemid: string (nullable = true)
- |-- ab_name: string (nullable = true)
- |-- dilution_text: string (nullable = true)
- |-- dilution_comparison: string (nullable = true)
- |-- dilution_value: string (nullable = true)
- |-- interpretation: string (nullable = true)
- |-- comments: string (nullable = true)
 
 ----------------------------
