@@ -1,13 +1,36 @@
-Schema for file: cleaned_data\diagnoses_icd
+Schema for file: sql_data\admissions
+Row count: 546028
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- seq_num: string (nullable = true)
- |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- admittime: timestamp (nullable = true)
+ |-- dischtime: timestamp (nullable = true)
+ |-- deathtime: timestamp (nullable = true)
+ |-- admission_type: string (nullable = true)
+ |-- admit_provider_id: string (nullable = true)
+ |-- admission_location: string (nullable = true)
+ |-- discharge_location: string (nullable = true)
+ |-- insurance: string (nullable = true)
+ |-- language: string (nullable = true)
+ |-- marital_status: string (nullable = true)
+ |-- race: string (nullable = true)
+ |-- edregtime: timestamp (nullable = true)
+ |-- edouttime: timestamp (nullable = true)
+ |-- hospital_expire_flag: integer (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\discharge
+Schema for file: sql_data\diagnoses_icd
+Row count: 6364488
+root
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- seq_num: integer (nullable = true)
+ |-- icd_code: string (nullable = true)
+ |-- icd_version: integer (nullable = true)
+
+----------------------------
+Schema for file: sql_data\discharge
+Row count: 83506080
 root
  |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
@@ -19,80 +42,88 @@ root
  |-- text: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\discharge_detail
+Schema for file: sql_data\discharge_detail
+Row count: 186138
 root
  |-- note_id: string (nullable = true)
- |-- subject_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
  |-- field_name: string (nullable = true)
  |-- field_value: string (nullable = true)
- |-- field_ordinal: string (nullable = true)
+ |-- field_ordinal: integer (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\drgcodes
+Schema for file: sql_data\drgcodes
+Row count: 761856
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
  |-- drg_type: string (nullable = true)
- |-- drg_code: string (nullable = true)
+ |-- drg_code: integer (nullable = true)
  |-- description: string (nullable = true)
- |-- drg_severity: string (nullable = true)
- |-- drg_mortality: string (nullable = true)
+ |-- drg_severity: integer (nullable = true)
+ |-- drg_mortality: integer (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\d_hcpcs
+Schema for file: sql_data\d_hcpcs
+Row count: 89208
 root
  |-- code: string (nullable = true)
- |-- category: string (nullable = true)
+ |-- category: integer (nullable = true)
  |-- long_description: string (nullable = true)
  |-- short_description: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\d_icd_diagnoses
+Schema for file: sql_data\d_icd_diagnoses
+Row count: 112107
 root
  |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
+ |-- icd_version: integer (nullable = true)
  |-- long_title: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\d_icd_procedures
+Schema for file: sql_data\d_icd_procedures
+Row count: 86423
 root
  |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
+ |-- icd_version: integer (nullable = true)
  |-- long_title: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\d_labitems
+Schema for file: sql_data\d_labitems
+Row count: 1650
 root
- |-- itemid: string (nullable = true)
+ |-- itemid: integer (nullable = true)
  |-- label: string (nullable = true)
  |-- fluid: string (nullable = true)
  |-- category: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\emar
+Schema for file: sql_data\emar
+Row count: 42808593
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
  |-- emar_id: string (nullable = true)
- |-- emar_seq: string (nullable = true)
+ |-- emar_seq: integer (nullable = true)
  |-- poe_id: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
+ |-- pharmacy_id: integer (nullable = true)
  |-- enter_provider_id: string (nullable = true)
- |-- charttime: string (nullable = true)
+ |-- charttime: timestamp (nullable = true)
  |-- medication: string (nullable = true)
  |-- event_txt: string (nullable = true)
- |-- scheduletime: string (nullable = true)
- |-- storetime: string (nullable = true)
+ |-- scheduletime: timestamp (nullable = true)
+ |-- storetime: timestamp (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\emar_detail
+Schema for file: sql_data\emar_detail
+Row count: 87371064
 root
- |-- subject_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
  |-- emar_id: string (nullable = true)
- |-- emar_seq: string (nullable = true)
- |-- parent_field_ordinal: string (nullable = true)
+ |-- emar_seq: integer (nullable = true)
+ |-- parent_field_ordinal: double (nullable = true)
  |-- administration_type: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
+ |-- pharmacy_id: integer (nullable = true)
  |-- barcode_type: string (nullable = true)
  |-- reason_for_no_barcode: string (nullable = true)
  |-- complete_dose_not_given: string (nullable = true)
@@ -122,131 +153,160 @@ root
  |-- non_formulary_visual_verification: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\hcpcsevents
+Schema for file: sql_data\hcpcsevents
+Row count: 186074
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- chartdate: date (nullable = true)
  |-- hcpcs_cd: string (nullable = true)
- |-- seq_num: string (nullable = true)
+ |-- seq_num: integer (nullable = true)
  |-- short_description: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\microbiologyevents
+Schema for file: sql_data\labevents
+Row count: 158374764
 root
- |-- microevent_id: string (nullable = true)
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- micro_specimen_id: string (nullable = true)
+ |-- labevent_id: integer (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- specimen_id: integer (nullable = true)
+ |-- itemid: integer (nullable = true)
  |-- order_provider_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
- |-- charttime: string (nullable = true)
- |-- spec_itemid: string (nullable = true)
+ |-- charttime: timestamp (nullable = true)
+ |-- storetime: timestamp (nullable = true)
+ |-- value: string (nullable = true)
+ |-- valuenum: double (nullable = true)
+ |-- valueuom: string (nullable = true)
+ |-- ref_range_lower: double (nullable = true)
+ |-- ref_range_upper: double (nullable = true)
+ |-- flag: string (nullable = true)
+ |-- priority: string (nullable = true)
+ |-- comments: string (nullable = true)
+
+----------------------------
+Schema for file: sql_data\microbiologyevents
+Row count: 3988224
+root
+ |-- microevent_id: integer (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- micro_specimen_id: integer (nullable = true)
+ |-- order_provider_id: string (nullable = true)
+ |-- chartdate: timestamp (nullable = true)
+ |-- charttime: timestamp (nullable = true)
+ |-- spec_itemid: integer (nullable = true)
  |-- spec_type_desc: string (nullable = true)
- |-- test_seq: string (nullable = true)
- |-- storedate: string (nullable = true)
- |-- storetime: string (nullable = true)
- |-- test_itemid: string (nullable = true)
+ |-- test_seq: integer (nullable = true)
+ |-- storedate: timestamp (nullable = true)
+ |-- storetime: timestamp (nullable = true)
+ |-- test_itemid: integer (nullable = true)
  |-- test_name: string (nullable = true)
- |-- org_itemid: string (nullable = true)
+ |-- org_itemid: integer (nullable = true)
  |-- org_name: string (nullable = true)
- |-- isolate_num: string (nullable = true)
+ |-- isolate_num: integer (nullable = true)
  |-- quantity: string (nullable = true)
- |-- ab_itemid: string (nullable = true)
+ |-- ab_itemid: integer (nullable = true)
  |-- ab_name: string (nullable = true)
  |-- dilution_text: string (nullable = true)
  |-- dilution_comparison: string (nullable = true)
- |-- dilution_value: string (nullable = true)
+ |-- dilution_value: double (nullable = true)
  |-- interpretation: string (nullable = true)
  |-- comments: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\omr
+Schema for file: sql_data\omr
+Row count: 7753027
 root
- |-- subject_id: string (nullable = true)
- |-- chartdate: string (nullable = true)
- |-- seq_num: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- chartdate: date (nullable = true)
+ |-- seq_num: integer (nullable = true)
  |-- result_name: string (nullable = true)
  |-- result_value: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\patients
+Schema for file: sql_data\patients
+Row count: 364627
 root
- |-- subject_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
  |-- gender: string (nullable = true)
- |-- anchor_age: string (nullable = true)
- |-- anchor_year: string (nullable = true)
+ |-- anchor_age: integer (nullable = true)
+ |-- anchor_year: integer (nullable = true)
  |-- anchor_year_group: string (nullable = true)
- |-- dod: string (nullable = true)
+ |-- dod: date (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\pharmacy
+Schema for file: sql_data\pharmacy
+Row count: 17847567
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- pharmacy_id: integer (nullable = true)
  |-- poe_id: string (nullable = true)
- |-- starttime: string (nullable = true)
- |-- stoptime: string (nullable = true)
+ |-- starttime: timestamp (nullable = true)
+ |-- stoptime: timestamp (nullable = true)
  |-- medication: string (nullable = true)
  |-- proc_type: string (nullable = true)
  |-- status: string (nullable = true)
- |-- entertime: string (nullable = true)
- |-- verifiedtime: string (nullable = true)
+ |-- entertime: timestamp (nullable = true)
+ |-- verifiedtime: timestamp (nullable = true)
  |-- route: string (nullable = true)
  |-- frequency: string (nullable = true)
  |-- disp_sched: string (nullable = true)
  |-- infusion_type: string (nullable = true)
  |-- sliding_scale: string (nullable = true)
  |-- lockout_interval: string (nullable = true)
- |-- basal_rate: string (nullable = true)
+ |-- basal_rate: double (nullable = true)
  |-- one_hr_max: string (nullable = true)
- |-- doses_per_24_hrs: string (nullable = true)
- |-- duration: string (nullable = true)
+ |-- doses_per_24_hrs: integer (nullable = true)
+ |-- duration: double (nullable = true)
  |-- duration_interval: string (nullable = true)
- |-- expiration_value: string (nullable = true)
+ |-- expiration_value: integer (nullable = true)
  |-- expiration_unit: string (nullable = true)
- |-- expirationdate: string (nullable = true)
+ |-- expirationdate: timestamp (nullable = true)
  |-- dispensation: string (nullable = true)
  |-- fill_quantity: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\prescriptions
+Schema for file: sql_data\prescriptions
+Row count: 20292611
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- pharmacy_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- pharmacy_id: integer (nullable = true)
  |-- poe_id: string (nullable = true)
- |-- poe_seq: string (nullable = true)
+ |-- poe_seq: integer (nullable = true)
  |-- order_provider_id: string (nullable = true)
- |-- starttime: string (nullable = true)
- |-- stoptime: string (nullable = true)
+ |-- starttime: timestamp (nullable = true)
+ |-- stoptime: timestamp (nullable = true)
  |-- drug_type: string (nullable = true)
  |-- drug: string (nullable = true)
  |-- formulary_drug_cd: string (nullable = true)
  |-- gsn: string (nullable = true)
- |-- ndc: string (nullable = true)
+ |-- ndc: long (nullable = true)
  |-- prod_strength: string (nullable = true)
  |-- form_rx: string (nullable = true)
  |-- dose_val_rx: string (nullable = true)
  |-- dose_unit_rx: string (nullable = true)
  |-- form_val_disp: string (nullable = true)
  |-- form_unit_disp: string (nullable = true)
- |-- doses_per_24_hrs: string (nullable = true)
+ |-- doses_per_24_hrs: integer (nullable = true)
  |-- route: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\procedures_icd
+Schema for file: sql_data\procedures_icd
+Row count: 859655
 root
- |-- subject_id: string (nullable = true)
- |-- hadm_id: string (nullable = true)
- |-- seq_num: string (nullable = true)
- |-- chartdate: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- seq_num: integer (nullable = true)
+ |-- chartdate: date (nullable = true)
  |-- icd_code: string (nullable = true)
- |-- icd_version: string (nullable = true)
+ |-- icd_version: integer (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\radiology
+Schema for file: sql_data\radiology
+Row count: 49312589
 root
  |-- note_id: string (nullable = true)
  |-- subject_id: string (nullable = true)
@@ -258,12 +318,23 @@ root
  |-- text: string (nullable = true)
 
 ----------------------------
-Schema for file: cleaned_data\radiology_detail
+Schema for file: sql_data\radiology_detail
+Row count: 6046121
 root
  |-- note_id: string (nullable = true)
- |-- subject_id: string (nullable = true)
+ |-- subject_id: integer (nullable = true)
  |-- field_name: string (nullable = true)
  |-- field_value: string (nullable = true)
- |-- field_ordinal: string (nullable = true)
+ |-- field_ordinal: integer (nullable = true)
+
+----------------------------
+Schema for file: sql_data\services
+Row count: 593071
+root
+ |-- subject_id: integer (nullable = true)
+ |-- hadm_id: integer (nullable = true)
+ |-- transfertime: timestamp (nullable = true)
+ |-- prev_service: string (nullable = true)
+ |-- curr_service: string (nullable = true)
 
 ----------------------------
