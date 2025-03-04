@@ -643,40 +643,113 @@ SELECT * FROM ml1_project.p01_microbiologyevents LIMIT 10;
 --create a new table for omr patients events
 DROP TABLE IF EXISTS ml1_project.p01_patients_omr;
 create table ml1_project.p01_patients_omr as
+SELECT 
+CAST(subject_id AS CHAR(8)) AS subject_id,
+CASE 
+    WHEN result_name = 'eGFR' then 0
+    WHEN result_name = 'Weight' then 1
+    WHEN result_name = 'Weight (Lbs)' then 2
+    WHEN result_name = 'Height' then 3
+    WHEN result_name = 'Height (Inches)' then 4
+    WHEN result_name = 'BMI' then 5
+    WHEN result_name = 'BMI (kg/m2)' then 6
+    WHEN result_name = 'Blood Pressure' then 7
+    WHEN result_name = 'Blood Pressure Sitting' then 8
+    WHEN result_name = 'Blood Pressure Lying' then 9
+    WHEN result_name = 'Blood Pressure Standing' then 10
+    WHEN result_name = 'Blood Pressure Standing (1 min)' then 11
+    WHEN result_name = 'Blood Pressure Standing (3 mins)' then 12
+END AS result_name,
+CAST(chartdate AS DATETIME) AS chartdate,
+CAST(seq_num AS UNSIGNED) AS seq_num,
+result_value
+FROM ml1_project.omr;
+SELECT * FROM ml1_project.p01_patients_omr LIMIT 10;
+
+--create a new table for omr patients events
+DROP TABLE IF EXISTS ml1_project.p02_patients_omr;
+create table ml1_project.p02_patients_omr as
+SELECT a.subject_id, a.result_name, a.result_value
+FROM ml1_project.p01_patients_omr a
+INNER JOIN
+(
+    SELECT A.subject_id, A.result_name, A.chartdate, B.seq_num
+    FROM
+    (
+        SELECT subject_id, result_name, max(chartdate) as chartdate
+        FROM ml1_project.p01_patients_omr
+        group by 1,2
+    ) a
+    INNER JOIN
+    (
+        SELECT subject_id, result_name, chartdate, max(seq_num) as seq_num
+        FROM ml1_project.p01_patients_omr
+        group by 1,2,3
+    ) b
+    ON A.subject_id = B.subject_id and A.result_name = B.result_name and A.chartdate = B.chartdate
+) b
+on a.subject_id = b.subject_id and a.result_name = b.result_name and a.chartdate = b.chartdate and a.seq_num = b.seq_num
+group by 1,2,3;
+SELECT * FROM ml1_project.p02_patients_omr LIMIT 10;
+
+--create a new table for omr patients events
+DROP TABLE IF EXISTS ml1_project.p03_patients_omr;
+create table ml1_project.p03_patients_omr as
 SELECT subject_id,
 COALESCE(
-    MAX(CASE WHEN result_name = 'Blood Pressure' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Blood Pressure Sitting' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Blood Pressure Lying' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Blood Pressure Standing' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Blood Pressure Standing (1 min)' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Blood Pressure Standing (3 mins)' THEN result_value END)
+    MAX(CASE WHEN result_name = 7 THEN result_value END),
+    MAX(CASE WHEN result_name = 8 THEN result_value END),
+    MAX(CASE WHEN result_name = 9 THEN result_value END),
+    MAX(CASE WHEN result_name = 10 THEN result_value END),
+    MAX(CASE WHEN result_name = 11 THEN result_value END),
+    MAX(CASE WHEN result_name = 12 THEN result_value END)
 ) AS blood_pressure,
 COALESCE(
-    MAX(CASE WHEN result_name = 'BMI (kg/m2)' THEN result_value END),
-    MAX(CASE WHEN result_name = 'BMI' THEN result_value END)
+    MAX(CASE WHEN result_name = 6 THEN result_value END),
+    MAX(CASE WHEN result_name = 5 THEN result_value END)
 ) AS bmi,
 COALESCE(
-    MAX(CASE WHEN result_name = 'Height (Inches)' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Height' THEN result_value END)
+    MAX(CASE WHEN result_name = 4 THEN result_value END),
+    MAX(CASE WHEN result_name = 3 THEN result_value END)
 ) AS height,
 COALESCE(
-    MAX(CASE WHEN result_name = 'Weight (Lbs)' THEN result_value END),
-    MAX(CASE WHEN result_name = 'Weight' THEN result_value END)
+    MAX(CASE WHEN result_name = 2 THEN result_value END),
+    MAX(CASE WHEN result_name = 1 THEN result_value END)
 ) AS weight,
-MAX(CASE WHEN result_name = 'eGFR' THEN result_value END) AS egfr
-FROM
-(
-    SELECT 
-        subject_id,
-        result_name,
-        result_value,
-        ROW_NUMBER() OVER (PARTITION BY subject_id, result_name ORDER BY chartdate DESC, seq_num DESC) AS rn
-    FROM omr
-) A
-WHERE rn = 1  -- Select only the most recent result for each result_name per patient
+MAX(CASE WHEN result_name = 0 THEN result_value END) AS egfr
+FROM ml1_project.p02_patients_omr
 GROUP BY subject_id;
-SELECT * FROM ml1_project.p01_patients_omr LIMIT 10;
+SELECT * FROM ml1_project.p03_patients_omr LIMIT 10;
+
+--create a new table for omr patients events
+DROP TABLE IF EXISTS ml1_project.p04_patients_omr;
+CREATE TABLE ml1_project.p04_patients_omr AS
+SELECT 
+    a.subject_id, 
+    SUBSTRING_INDEX(blood_pressure, '/', 1) AS blood_pressure_systolic,
+    SUBSTRING_INDEX(blood_pressure, '/', -1) AS blood_pressure_diastolic,
+    CASE 
+        WHEN bmi REGEXP '^[0-9]+(\.[0-9]*)?$' THEN CAST(bmi AS DECIMAL(10,2)) 
+        ELSE NULL 
+    END AS bmi, 
+    CASE 
+        WHEN height REGEXP '^[0-9]+(\.[0-9]*)?$' THEN CAST(height AS DECIMAL(10,2)) 
+        ELSE NULL 
+    END AS height, 
+    CASE 
+        WHEN weight REGEXP '^[0-9]+(\.[0-9]*)?$' THEN CAST(weight AS DECIMAL(10,2)) 
+        ELSE NULL 
+    END AS weight, 
+    CASE 
+        WHEN REPLACE(egfr, '>', '') REGEXP '^[0-9]+(\.[0-9]*)?$' 
+        THEN CAST(REPLACE(egfr, '>', '') AS DECIMAL(10,2)) 
+        ELSE NULL 
+    END AS egfr 
+FROM ml1_project.p03_patients_omr a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id;
+SELECT * FROM ml1_project.p04_patients_omr LIMIT 10;
+
 
 --create a new table for pharmacy events
 drop table if exists ml1_project.p01_pharmacy;
@@ -684,7 +757,7 @@ create table ml1_project.p01_pharmacy as
 SELECT 
     CAST(a.subject_id AS CHAR(8)) AS subject_id, 
     CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
-    CAST(a.starttime AS DATETIME) AS starttime, 
+    STR_TO_DATE(NULLIF(starttime, ''), '%Y-%m-%d %H:%i:%s') AS starttime, 
     a.medication
 FROM ml1_project.pharmacy a
 INNER JOIN ml1_project.p01_patients p
@@ -698,7 +771,7 @@ create table ml1_project.p01_prescriptions as
 SELECT 
     CAST(a.subject_id AS CHAR(8)) AS subject_id, 
     CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
-    CAST(a.starttime AS DATETIME) AS starttime, 
+    STR_TO_DATE(NULLIF(starttime, ''), '%Y-%m-%d %H:%i:%s') AS starttime, 
     a.drug
 FROM ml1_project.prescriptions a
 INNER JOIN ml1_project.p01_patients p
@@ -754,3 +827,29 @@ JOIN ml1_project.d_icd_procedures B
 on A.icd_code = B.icd_code and A.icd_version = B.icd_version
 GROUP BY 1
 order by 3 desc, 2 desc;
+
+
+----------------------------------------------------------------------------------------------------------------
+--create a new db
+CREATE TABLE ml1_project_clean.patients AS
+SELECT a.subject_id, a.gender, a.anchor_age, a.anchor_year,
+b.insurance, b.language, b.marital_status, b.race,
+c.blood_pressure_systolic, c.blood_pressure_diastolic, c.bmi, c.height, c.weight, c.egfr
+FROM ml1_project.p01_patients a
+left join ml1_project.p01_patients_admissions b
+on a.subject_id = b.subject_id
+left join ml1_project.p04_patients_omr c
+on a.subject_id = c.subject_id
+WHERE a.subject_id is not null and b.subject_id is not null and c.subject_id is not null and a.subject_id != '' and b.subject_id != '' and c.subject_id != ''
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
+
+CREATE TABLE ml1_project_clean.discharge AS
+select *
+from ml1_project.p01_discharge;
+
+SELECT * 
+INTO OUTFILE 'C:/Users/John/Documents/Data engineering/exported_file.csv'
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.patients;
