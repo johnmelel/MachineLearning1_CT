@@ -540,11 +540,206 @@ DELETE FROM services WHERE subject_id IS NULL OR subject_id = '' OR subject_id =
 --Filtering tables for use
 
 --create a new table for patients who are still alive
+DROP TABLE IF EXISTS ml1_project.p01_patients;
 CREATE TABLE ml1_project.p01_patients AS
-SELECT subject_id, gender, anchor_age, anchor_year
+SELECT 
+    CAST(subject_id AS CHAR(8)) AS subject_id, 
+    CAST(gender AS CHAR(1)) AS gender, 
+    CAST(anchor_age AS UNSIGNED) AS anchor_age, 
+    CAST(anchor_year AS UNSIGNED) AS anchor_year
 FROM ml1_project.patients
 WHERE dod = ''
 GROUP BY 1,2,3,4;
+SELECT * FROM ml1_project.p01_patients LIMIT 10;
+
+--create a new table for discharge summaries
+DROP TABLE IF EXISTS ml1_project.p01_discharge;
+CREATE TABLE ml1_project.p01_discharge AS
+SELECT 
+    CAST(d.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(d.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(d.charttime AS DATETIME) AS charttime, 
+    d.text
+FROM ml1_project.discharge d
+INNER JOIN ml1_project.p01_patients p
+ON d.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_discharge LIMIT 10;
+
+--create a new table for drg events
+DROP TABLE IF EXISTS ml1_project.p01_drgcodes;
+create table ml1_project.p01_drgcodes as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    a.description
+FROM ml1_project.drgcodes a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3;
+SELECT * FROM ml1_project.p01_drgcodes LIMIT 10;
+
+--create a new table for hcpcsevents events
+DROP TABLE IF EXISTS ml1_project.p01_hcpcsevents;
+create table ml1_project.p01_hcpcsevents as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(a.chartdate AS DATETIME) AS chartdate, 
+    a.short_description
+FROM ml1_project.hcpcsevents a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_hcpcsevents LIMIT 10;
+
+--create a new table for emar events
+DROP TABLE IF EXISTS ml1_project.p01_emar;
+create table ml1_project.p01_emar as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(a.charttime AS DATETIME) AS charttime, 
+    a.medication
+FROM ml1_project.emar a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+WHERE event_txt = 'Administered'
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_emar LIMIT 10;
+
+--create a new table for admissions events
+DROP TABLE IF EXISTS ml1_project.p01_patients_admissions;
+create table ml1_project.p01_patients_admissions as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    a.insurance,
+    a.language, 
+    a.marital_status, 
+    a.race
+FROM ml1_project.admissions a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4, 5;
+SELECT * FROM ml1_project.p01_patients_admissions LIMIT 10;
+SELECT subject_id, COUNT(*) FROM ml1_project.p01_patients_admissions GROUP BY 1 ORDER BY 2 DESC LIMIT 10; 
+
+--create a new table for microbiologyevents events
+DROP TABLE IF EXISTS ml1_project.p01_microbiologyevents;
+create table ml1_project.p01_microbiologyevents as
+SELECT
+    CAST(a.subject_id AS CHAR(8)) AS subject_id,
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id,
+    CAST(a.chartdate AS DATETIME) AS chartdate, 
+    spec_type_desc,
+    test_name,
+    comments
+FROM ml1_project.microbiologyevents a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4, 5, 6;
+SELECT * FROM ml1_project.p01_microbiologyevents LIMIT 10;
+
+--create a new table for omr patients events
+DROP TABLE IF EXISTS ml1_project.p01_patients_omr;
+create table ml1_project.p01_patients_omr as
+SELECT subject_id,
+COALESCE(
+    MAX(CASE WHEN result_name = 'Blood Pressure' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Blood Pressure Sitting' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Blood Pressure Lying' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Blood Pressure Standing' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Blood Pressure Standing (1 min)' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Blood Pressure Standing (3 mins)' THEN result_value END)
+) AS blood_pressure,
+COALESCE(
+    MAX(CASE WHEN result_name = 'BMI (kg/m2)' THEN result_value END),
+    MAX(CASE WHEN result_name = 'BMI' THEN result_value END)
+) AS bmi,
+COALESCE(
+    MAX(CASE WHEN result_name = 'Height (Inches)' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Height' THEN result_value END)
+) AS height,
+COALESCE(
+    MAX(CASE WHEN result_name = 'Weight (Lbs)' THEN result_value END),
+    MAX(CASE WHEN result_name = 'Weight' THEN result_value END)
+) AS weight,
+MAX(CASE WHEN result_name = 'eGFR' THEN result_value END) AS egfr
+FROM
+(
+    SELECT 
+        subject_id,
+        result_name,
+        result_value,
+        ROW_NUMBER() OVER (PARTITION BY subject_id, result_name ORDER BY chartdate DESC, seq_num DESC) AS rn
+    FROM omr
+) A
+WHERE rn = 1  -- Select only the most recent result for each result_name per patient
+GROUP BY subject_id;
+SELECT * FROM ml1_project.p01_patients_omr LIMIT 10;
+
+--create a new table for pharmacy events
+drop table if exists ml1_project.p01_pharmacy;
+create table ml1_project.p01_pharmacy as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(a.starttime AS DATETIME) AS starttime, 
+    a.medication
+FROM ml1_project.pharmacy a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_pharmacy LIMIT 10;
+
+--create a new table for prescriptions events
+drop table if exists ml1_project.p01_prescriptions;
+create table ml1_project.p01_prescriptions as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(a.starttime AS DATETIME) AS starttime, 
+    a.drug
+FROM ml1_project.prescriptions a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_prescriptions LIMIT 10;
+
+--create a new table for radiology summaries
+DROP TABLE IF EXISTS ml1_project.p01_radiology;
+CREATE TABLE ml1_project.p01_radiology AS
+SELECT 
+    CAST(d.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(d.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(d.charttime AS DATETIME) AS charttime, 
+    d.text
+FROM ml1_project.radiology d
+INNER JOIN ml1_project.p01_patients p
+ON d.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_radiology LIMIT 10;
+
+--create a new table for services events
+DROP TABLE IF EXISTS ml1_project.p01_services;
+create table ml1_project.p01_services as
+SELECT 
+    CAST(a.subject_id AS CHAR(8)) AS subject_id, 
+    CAST(a.hadm_id AS CHAR(8)) AS hadm_id, 
+    CAST(a.transfertime AS DATETIME) AS transfertime, 
+    a.curr_service
+FROM ml1_project.services a
+INNER JOIN ml1_project.p01_patients p
+ON a.subject_id = p.subject_id
+GROUP BY 1, 2, 3, 4;
+SELECT * FROM ml1_project.p01_services LIMIT 10;
+
+--getting out features to select relevant ones for aggregation.
+SELECT description, count(*), count(DISTINCT subject_id) from ml1_project.p01_drgcodes group by 1 order by 3 desc, 2 desc;
+SELECT short_description, count(*), count(DISTINCT subject_id) from ml1_project.p01_hcpcsevents group by 1 order by 3 desc, 2 desc;
+SELECT medication, count(*), count(DISTINCT subject_id) from ml1_project.p01_emar group by 1 order by 3 desc, 2 desc;
+SELECT medication, count(*), count(DISTINCT subject_id) from ml1_project.p01_pharmacy group by 1 order by 3 desc, 2 desc;
+SELECT drug, count(*), count(DISTINCT subject_id) from ml1_project.p01_prescriptions group by 1 order by 3 desc, 2 desc;
 
 SELECT B.long_title, COUNT(*) AS row_count, COUNT(DISTINCT A.subject_id) AS unique_subjects
 FROM ml1_project.diagnoses_icd A
@@ -554,3 +749,8 @@ GROUP BY 1
 order by 3 desc, 2 desc;
 
 SELECT B.long_title, COUNT(*) AS row_count, COUNT(DISTINCT A.subject_id) AS unique_subjects
+FROM ml1_project.procedures_icd A
+JOIN ml1_project.d_icd_procedures B
+on A.icd_code = B.icd_code and A.icd_version = B.icd_version
+GROUP BY 1
+order by 3 desc, 2 desc;
