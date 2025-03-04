@@ -293,7 +293,7 @@ CREATE TABLE ml1_project.omr (
     result_name VARCHAR(100),
     result_value TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/XXXXX.omr'
+LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/omr.csv'
 INTO TABLE ml1_project.omr
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -447,3 +447,110 @@ FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
+--admissions
+--diagnoses_icd
+--discharge
+--discharge_detail
+--drgcodes
+--d_hcpcs
+--d_icd_diagnoses
+--d_icd_procedures
+--d_labitems
+--emar
+--emar_detail
+--hcpcsevents
+--labevents
+--microbiologyevents
+--omr
+--patients
+--pharmacy
+--prescriptions
+--procedures_icd
+--radiology
+--radiology_detail
+--services
+
+SELECT 'admissions' AS table_name, COUNT(*) AS row_count FROM admissions UNION ALL
+SELECT 'diagnoses_icd', COUNT(*) FROM diagnoses_icd UNION ALL
+SELECT 'discharge', COUNT(*) FROM discharge UNION ALL
+SELECT 'discharge_detail', COUNT(*) FROM discharge_detail UNION ALL
+SELECT 'drgcodes', COUNT(*) FROM drgcodes UNION ALL
+SELECT 'd_hcpcs', COUNT(*) FROM d_hcpcs UNION ALL
+SELECT 'd_icd_diagnoses', COUNT(*) FROM d_icd_diagnoses UNION ALL
+SELECT 'd_icd_procedures', COUNT(*) FROM d_icd_procedures UNION ALL
+SELECT 'd_labitems', COUNT(*) FROM d_labitems UNION ALL
+SELECT 'emar', COUNT(*) FROM emar UNION ALL
+SELECT 'emar_detail', COUNT(*) FROM emar_detail UNION ALL
+SELECT 'hcpcsevents', COUNT(*) FROM hcpcsevents UNION ALL
+SELECT 'labevents', COUNT(*) FROM labevents UNION ALL
+SELECT 'microbiologyevents', COUNT(*) FROM microbiologyevents UNION ALL
+SELECT 'omr', COUNT(*) FROM omr UNION ALL
+SELECT 'patients', COUNT(*) FROM patients UNION ALL
+SELECT 'pharmacy', COUNT(*) FROM pharmacy UNION ALL
+SELECT 'prescriptions', COUNT(*) FROM prescriptions UNION ALL
+SELECT 'procedures_icd', COUNT(*) FROM procedures_icd UNION ALL
+SELECT 'radiology', COUNT(*) FROM radiology UNION ALL
+SELECT 'radiology_detail', COUNT(*) FROM radiology_detail UNION ALL
+SELECT 'services', COUNT(*) FROM services;
+
+--ROW COUNTS
+--admissions            546028
+--diagnoses_icd         6364488
+--discharge             332072
+--discharge_detail      186138
+--drgcodes              761856
+--d_hcpcs               89208
+--d_icd_diagnoses       112107
+--d_icd_procedures      86423
+--d_labitems            1650
+--emar                  42808593
+--emar_detail           87371064
+--hcpcsevents           186074
+--labevents             158374764
+--microbiologyevents    3988224
+--omr                   7753027
+--patients              364627
+--pharmacy              17847567
+--prescriptions         20292611
+--procedures_icd        859655
+--radiology             2321355
+--radiology_detail      6046121
+--services              593071
+
+DELETE FROM admissions WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM diagnoses_icd WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM discharge WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';          --233 rows
+DELETE FROM discharge_detail WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM drgcodes WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM emar WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM emar_detail WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM hcpcsevents WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM labevents WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM microbiologyevents WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM omr WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM patients WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM pharmacy WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM prescriptions WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM procedures_icd WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM radiology WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM radiology_detail WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+DELETE FROM services WHERE subject_id IS NULL OR subject_id = '' OR subject_id = ' ';
+
+
+--Filtering tables for use
+
+--create a new table for patients who are still alive
+CREATE TABLE ml1_project.p01_patients AS
+SELECT subject_id, gender, anchor_age, anchor_year
+FROM ml1_project.patients
+WHERE dod = ''
+GROUP BY 1,2,3,4;
+
+SELECT B.long_title, COUNT(*) AS row_count, COUNT(DISTINCT A.subject_id) AS unique_subjects
+FROM ml1_project.diagnoses_icd A
+JOIN ml1_project.d_icd_diagnoses B
+on A.icd_code = B.icd_code and A.icd_version = B.icd_version
+GROUP BY 1
+order by 3 desc, 2 desc;
+
+SELECT B.long_title, COUNT(*) AS row_count, COUNT(DISTINCT A.subject_id) AS unique_subjects
