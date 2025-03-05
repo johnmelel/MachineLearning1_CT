@@ -830,7 +830,7 @@ order by 3 desc, 2 desc;
 
 
 ----------------------------------------------------------------------------------------------------------------
---create a new db
+--create a new db -- Creates the patient_cleaned.csv file
 CREATE TABLE ml1_project_clean.patients AS
 SELECT a.subject_id, a.gender, a.anchor_age, a.anchor_year,
 b.insurance, b.language, b.marital_status, b.race,
