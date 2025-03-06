@@ -70,3 +70,9 @@ TODO:
 - Sagana: Data pipeline, feature extraction from nlp, data standardization 
 - Yeochan: NLP embeddings and clustering work
 - Kanav: Data pipeline, feature extraction from nlp, data standardization 
+
+
+## Dataset Column Names Mapping:
+- hadm_ID -> Hospital Admission ID
+- subject_id -> Patient ID
+- icd9_code -> ICD9 Code
