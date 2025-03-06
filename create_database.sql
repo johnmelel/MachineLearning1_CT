@@ -831,6 +831,8 @@ order by 3 desc, 2 desc;
 
 ----------------------------------------------------------------------------------------------------------------
 --create a new db
+
+--final patient table
 CREATE TABLE ml1_project_clean.patients AS
 SELECT a.subject_id, a.gender, a.anchor_age, a.anchor_year,
 b.insurance, b.language, b.marital_status, b.race,
@@ -843,9 +845,6 @@ on a.subject_id = c.subject_id
 WHERE a.subject_id is not null and b.subject_id is not null and c.subject_id is not null and a.subject_id != '' and b.subject_id != '' and c.subject_id != ''
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
 
-CREATE TABLE ml1_project_clean.discharge AS
-select *
-from ml1_project.p01_discharge;
 
 SELECT * 
 INTO OUTFILE 'C:/Users/John/Documents/Data engineering/exported_file.csv'
@@ -853,3 +852,94 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"' 
 LINES TERMINATED BY '\n'
 FROM ml1_project_clean.patients;
+
+CREATE TABLE ml1_project_clean.diagnoses_icd AS
+SELECT A.*
+FROM ml1_project.diagnoses_icd A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.procedures_icd AS
+SELECT A.*
+FROM ml1_project.procedures_icd A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.drgcodes AS
+SELECT A.*
+FROM ml1_project.p01_drgcodes A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.hcpcsevents AS
+SELECT A.*
+FROM ml1_project.p01_hcpcsevents A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.emar AS
+SELECT A.*
+FROM ml1_project.p01_emar A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.pharmacy AS
+SELECT A.*
+FROM ml1_project.p01_pharmacy A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.prescriptions AS
+SELECT A.*
+FROM ml1_project.p01_prescriptions A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.d_icd_diagnoses AS
+SELECT A.*
+FROM ml1_project.d_icd_diagnoses A;
+
+CREATE TABLE ml1_project_clean.d_icd_procedures AS
+SELECT A.*
+FROM ml1_project.d_icd_procedures A;
+
+CREATE TABLE ml1_project_clean.discharge AS
+SELECT A.*
+FROM ml1_project.p01_discharge A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.radiology AS
+SELECT A.*
+FROM ml1_project.p01_radiology A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+CREATE TABLE ml1_project_clean.services AS
+SELECT A.*
+FROM ml1_project.p01_services A
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+ON A.subject_id = B.subject_id;
+
+--admissions            Combined to patients
+--diagnoses_icd         Yes
+--discharge             Yes
+--discharge_detail
+--drgcodes              Yes
+--d_hcpcs
+--d_icd_diagnoses       Yes
+--d_icd_procedures      Yes
+--d_labitems
+--emar                  Yes
+--emar_detail
+--hcpcsevents           Yes
+--labevents
+--microbiologyevents
+--omr                   Combined to patients
+--patients              Yes
+--pharmacy              Yes
+--prescriptions         Yes
+--procedures_icd        Yes
+--radiology             Yes
+--radiology_detail
+--services              Yes
