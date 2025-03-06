@@ -30,7 +30,7 @@ nltk.download('wordnet')
 nltk.download('punkt')
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Initialize Spark Session
@@ -47,7 +47,11 @@ def initialize_spark(app_name="Clinical_Notes_Processing", memory="4g"):
              .config("spark.rdd.compress", "true") 
              .config("spark.memory.fraction", "0.8") 
              .config("spark.memory.storageFraction", "0.3") 
+             .config("spark.ui.showConsoleProgress", "true")  # Enable live progress
              .getOrCreate())
+    
+    # Set Spark logging level to DEBUG for more detailed output
+    spark.sparkContext.setLogLevel("DEBUG")
     return spark
 
 def setup_nltk():
@@ -106,7 +110,8 @@ def embed_text_func(text: str) -> list:
     """
     Compute embedding for long texts using a chunking approach with batch processing.
     Splits the text into non-overlapping 512-token chunks, processes all chunks
-    in a single forward pass, and returns the mean embedding.
+    in a single forward pass using the fast tokenizer's __call__ method,
+    and returns the mean embedding across chunks.
     """
     if not text or not isinstance(text, str):
         return []
@@ -116,10 +121,19 @@ def embed_text_func(text: str) -> list:
     total_tokens = input_ids.size(0)
     max_length = 512
     chunks = []
+    # Create chunk texts from the tokenized input.
     for i in range(0, total_tokens, max_length):
-        chunks.append(input_ids[i:i+max_length])
-    # Batch pad all chunks to max_length
-    batch_encoding = global_tokenizer.pad({"input_ids": chunks}, return_tensors="pt", padding="max_length", max_length=max_length)
+        chunk_ids = input_ids[i:i+max_length]
+        chunk_text = global_tokenizer.decode(chunk_ids, skip_special_tokens=False)
+        chunks.append(chunk_text)
+    # Use the fast tokenizer's __call__ method to encode the list of chunks
+    batch_encoding = global_tokenizer(
+        chunks,
+        return_tensors="pt",
+        padding="max_length",
+        truncation=True,
+        max_length=max_length
+    )
     batch_encoding = {k: v.to(DEVICE) for k, v in batch_encoding.items()}
     with torch.no_grad():
         outputs = global_model(**batch_encoding)
@@ -129,7 +143,7 @@ def embed_text_func(text: str) -> list:
     sum_embeddings = torch.sum(token_embeddings * mask_expanded, dim=1)
     sum_mask = torch.clamp(mask_expanded.sum(dim=1), min=1e-9)
     chunk_embeddings = sum_embeddings / sum_mask  # (batch_size, hidden_size)
-    final_embedding = chunk_embeddings.mean(dim=0)
+    final_embedding = chunk_embeddings.mean(dim=0)  # Mean pooling across chunks
     return final_embedding.cpu().numpy().tolist()
 
 def clean_text_func(text: str) -> str:
