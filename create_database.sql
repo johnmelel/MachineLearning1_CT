@@ -17,7 +17,7 @@ CREATE TABLE ml1_project.admissions (
     edouttime VARCHAR(50),
     hospital_expire_flag VARCHAR(10)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/admissions.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/admissions.csv'
 INTO TABLE ml1_project.admissions
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -32,7 +32,7 @@ CREATE TABLE ml1_project.diagnoses_icd (
     icd_code VARCHAR(50),
     icd_version VARCHAR(10)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/diagnoses_icd.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/diagnoses_icd.csv'
 INTO TABLE ml1_project.diagnoses_icd
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -50,7 +50,7 @@ CREATE TABLE ml1_project.discharge (
     storetime VARCHAR(50),
     text TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/discharge.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/discharge.csv'
 INTO TABLE ml1_project.discharge
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -65,7 +65,7 @@ CREATE TABLE ml1_project.discharge_detail (
     field_value TEXT,
     field_ordinal VARCHAR(10)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/discharge_detail.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/discharge_detail.csv'
 INTO TABLE ml1_project.discharge_detail
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -82,7 +82,7 @@ CREATE TABLE ml1_project.drgcodes (
     drg_severity VARCHAR(10),
     drg_mortality VARCHAR(10)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/drgcodes.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/drgcodes.csv'
 INTO TABLE ml1_project.drgcodes
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -96,7 +96,7 @@ CREATE TABLE ml1_project.d_hcpcs (
     long_description TEXT,
     short_description VARCHAR(100)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/d_hcpcs.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/d_hcpcs.csv'
 INTO TABLE ml1_project.d_hcpcs
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -109,7 +109,7 @@ CREATE TABLE ml1_project.d_icd_diagnoses (
     icd_version VARCHAR(10),
     long_title TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/d_icd_diagnoses.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/d_icd_diagnoses.csv'
 INTO TABLE ml1_project.d_icd_diagnoses
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -122,7 +122,7 @@ CREATE TABLE ml1_project.d_icd_procedures (
     icd_version VARCHAR(10),
     long_title TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/d_icd_procedures.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/d_icd_procedures.csv'
 INTO TABLE ml1_project.d_icd_procedures
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -136,7 +136,7 @@ CREATE TABLE ml1_project.d_labitems (
     fluid VARCHAR(50),
     category VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/d_labitems.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/d_labitems.csv'
 INTO TABLE ml1_project.d_labitems
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -158,7 +158,7 @@ CREATE TABLE ml1_project.emar (
     scheduletime VARCHAR(50),
     storetime VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/emar.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/emar.csv'
 INTO TABLE ml1_project.emar
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -201,7 +201,7 @@ CREATE TABLE ml1_project.emar_detail (
     site VARCHAR(50),
     non_formulary_visual_verification VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/emar_detail.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/emar_detail.csv'
 INTO TABLE ml1_project.emar_detail
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -217,7 +217,7 @@ CREATE TABLE ml1_project.hcpcsevents (
     seq_num VARCHAR(10),
     short_description TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/hcpcsevents.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/hcpcsevents.csv'
 INTO TABLE ml1_project.hcpcsevents
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -243,7 +243,7 @@ CREATE TABLE ml1_project.labevents (
     priority VARCHAR(50),
     comments TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/labevents.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/labevents.csv'
 INTO TABLE ml1_project.labevents
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -278,7 +278,7 @@ CREATE TABLE ml1_project.microbiologyevents (
     interpretation VARCHAR(50),
     comments TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/microbiologyevents.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/microbiologyevents.csv'
 INTO TABLE ml1_project.microbiologyevents
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -293,7 +293,7 @@ CREATE TABLE ml1_project.omr (
     result_name VARCHAR(100),
     result_value TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/omr.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/omr.csv'
 INTO TABLE ml1_project.omr
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -309,7 +309,7 @@ CREATE TABLE ml1_project.patients (
     anchor_year_group VARCHAR(50),
     dod VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/patients.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/patients.csv'
 INTO TABLE ml1_project.patients
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -346,7 +346,7 @@ CREATE TABLE ml1_project.pharmacy (
     dispensation VARCHAR(50),
     fill_quantity VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/pharmacy.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/pharmacy.csv'
 INTO TABLE ml1_project.pharmacy
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -377,7 +377,7 @@ CREATE TABLE ml1_project.prescriptions (
     doses_per_24_hrs VARCHAR(10),
     route VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/prescriptions.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/prescriptions.csv'
 INTO TABLE ml1_project.prescriptions
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -393,7 +393,7 @@ CREATE TABLE ml1_project.procedures_icd (
     icd_code VARCHAR(50),
     icd_version VARCHAR(10)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/procedures_icd.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/procedures_icd.csv'
 INTO TABLE ml1_project.procedures_icd
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -411,7 +411,7 @@ CREATE TABLE ml1_project.radiology (
     storetime VARCHAR(255),
     text TEXT
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/radiology.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/radiology.csv'
 INTO TABLE ml1_project.radiology
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -426,7 +426,7 @@ CREATE TABLE ml1_project.radiology_detail (
     field_value TEXT,
     field_ordinal VARCHAR(255)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/radiology_detail.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/radiology_detail.csv'
 INTO TABLE ml1_project.radiology_detail
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -441,7 +441,7 @@ CREATE TABLE ml1_project.services (
     prev_service VARCHAR(50),
     curr_service VARCHAR(50)
 );
-LOAD DATA LOCAL INFILE 'C:/Users/John/Desktop/MS ADS/ADSP 31017 IP09 Machine Learning I/Group Project/sql_data/services.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/User/Group_Project/sql_data/services.csv'
 INTO TABLE ml1_project.services
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
@@ -845,14 +845,6 @@ on a.subject_id = c.subject_id
 WHERE a.subject_id is not null and b.subject_id is not null and c.subject_id is not null and a.subject_id != '' and b.subject_id != '' and c.subject_id != ''
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
 
-
-SELECT * 
-INTO OUTFILE 'C:/Users/John/Documents/Data engineering/exported_file.csv'
-FIELDS TERMINATED BY ',' 
-ENCLOSED BY '"' 
-LINES TERMINATED BY '\n'
-FROM ml1_project_clean.patients;
-
 CREATE TABLE ml1_project_clean.diagnoses_icd AS
 SELECT A.*
 FROM ml1_project.diagnoses_icd A
@@ -904,13 +896,13 @@ SELECT A.*
 FROM ml1_project.d_icd_procedures A;
 
 CREATE TABLE ml1_project_clean.discharge AS
-SELECT A.*
+SELECT A.subject_id, A.hadm_id, A.charttime, replace(replace(A.text, '|',''),'"','') as text
 FROM ml1_project.p01_discharge A
 INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
 ON A.subject_id = B.subject_id;
 
 CREATE TABLE ml1_project_clean.radiology AS
-SELECT A.*
+SELECT A.subject_id, A.hadm_id, A.charttime, replace(replace(A.text, '|',''),'"','') as text
 FROM ml1_project.p01_radiology A
 INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
 ON A.subject_id = B.subject_id;
@@ -943,3 +935,95 @@ ON A.subject_id = B.subject_id;
 --radiology             Yes
 --radiology_detail
 --services              Yes
+
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/patients.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.patients;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/diagnoses_icd.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.diagnoses_icd;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/discharge.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.discharge;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/drgcodes.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.drgcodes;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/d_icd_diagnoses.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.d_icd_diagnoses;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/d_icd_procedures.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.d_icd_procedures;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/emar.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.emar;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/hcpcsevents.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.hcpcsevents;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/pharmacy.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.pharmacy;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/prescriptions.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.prescriptions;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/procedures_icd.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.procedures_icd;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/radiology.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.radiology;
+
+SELECT * 
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/services.csv'
+FIELDS TERMINATED BY '|' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+FROM ml1_project_clean.services;
