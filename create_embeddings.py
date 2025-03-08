@@ -23,6 +23,9 @@ from transformers import AutoTokenizer, AutoModel
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, pandas_udf
 from pyspark.sql.types import ArrayType, FloatType, StringType
+from pyspark.sql.functions import collect_list
+from pyspark.sql.functions import col
+from pyspark.sql.functions import pandas_udf, PandasUDFType
 
 import ssl
 
@@ -49,13 +52,7 @@ logger = logging.getLogger(__name__)
 # ----------------------
 # Device Selection
 # ----------------------
-# if torch.backends.mps.is_available():
-#     DEVICE = torch.device("mps")
-# elif torch.cuda.is_available():
-#     DEVICE = torch.device("cuda")
-# else:
-#     DEVICE = torch.device("cpu")
-DEVICE = torch.device("cpu")
+DEVICE = torch.device("mps")
 logger.info(f"Using device: {DEVICE}")
 
 # ----------------------
@@ -83,7 +80,6 @@ def get_model_and_tokenizer():
 # ----------------------
 # Gold-Standard Keywords
 # ----------------------
-# Set of keywords representing gold-standard clinical entities.
 GOLD_KEYWORDS = set([
     'mass', 'masses', 'calcification', 'calcifications', 'microcalcification', 'microcalcifications',
     'asymmetry', 'distortion', 'density', 'densities', 'nodule', 'nodules', 'lesion', 'lesions',
@@ -199,39 +195,61 @@ def clean_text_udf(texts: pd.Series) -> pd.Series:
 # ----------------------
 # Spark Processing Pipeline
 # ----------------------
-def process_notes_spark(input_path: str, output_path: str, text_column: str) -> None:
+def process_notes_spark(input_path: str, output_path: str) -> None:
     """
-    Processes clinical notes stored in a Spark-readable format (e.g., parquet),
-    applies cleaning and embedding UDFs, and writes out the result.
+    Processes clinical notes from a Spark-readable parquet file, computes note-level embeddings for each text column,
+    aggregates them per patient (subject_id) via element-wise averaging, and writes the patient-level embeddings to a parquet file.
+    The output file has columns 'subject_id', 'embedded_radiology_text', and 'embedded_discharge_text'.
     """
     spark = (SparkSession.builder
-             .master("local[*]") # use all cores on computer/dynamically adjust based of cpu count and maximize parallism forcomput vector opertations
-             .appName("Clinical_Notes_Processing")
-             .config("spark.driver.memory", "8g") # half of ram on mac
+             .master("local[*]")
+             .appName("Clinical_Notes_Patient_Level_Embeddings")
+             .config("spark.driver.memory", "8g")
              .config("spark.executor.memory", "4g")
-             .config("spark.driver.maxResultSize", "2g") # increase for embeddings rapidly growing
+             .config("spark.driver.maxResultSize", "2g")
              .config("spark.sql.shuffle.partitions", "8")
              .config("spark.executor.cores", "4")
-             .config("spark.driver.extraJavaOptions", "-XX:+UseG1GC") # more efficient garbage collector. Helpful for large heaps containing embedded vectors 
+             .config("spark.driver.extraJavaOptions", "-XX:+UseG1GC")
              .getOrCreate())
     spark.sparkContext.setLogLevel("WARN")
     logger.info("Spark session initialized.")
+    
+    # Define Aggregator UDF inside Spark context to ensure an active Spark session
+    @pandas_udf('array<float>', PandasUDFType.GROUPED_AGG)
+    def avg_embedding_udf(v: pd.Series) -> list:
+        import numpy as np
+        if v.empty:
+            return []
+        arr = np.array(v.tolist())
+        return np.mean(arr, axis=0).tolist()
 
-    # Read input dataset.
-    notes_df = spark.read.parquet(input_path).select('subject_id', text_column)
+    # Read input dataset with only needed columns
+    notes_df = spark.read.parquet(input_path).select('subject_id', 'radiology_text', 'discharge_text')
     logger.info(f"Input data read from {input_path}")
 
-    # Apply cleaning on the text column.
-    notes_df = notes_df.withColumn(f"cleaned_{text_column}_text", clean_text_udf(col(text_column)))
-    # Compute embeddings via the UDF.
-    notes_df = notes_df.withColumn(f"embedding_{text_column}", embed_text_udf(col(f"cleaned_{text_column}_text")))
-    # Optionally, you can drop or keep additional columns.
-    notes_df.cache()
-    logger.info("Processing complete; writing output.")
-    
-    notes_df.write.mode("overwrite").option("compression", "snappy").parquet(f"{text_column}/{output_path}")
+    text_columns = ['radiology_text', 'discharge_text']
+
+    # For each text column, apply cleaning and compute note-level embeddings
+    for text_column in text_columns:
+        cleaned_col = f"cleaned_{text_column}_text"
+        embedding_col = f"embedding_{text_column}"
+        notes_df = notes_df.withColumn(cleaned_col, clean_text_udf(col(text_column)))
+        notes_df = notes_df.withColumn(embedding_col, embed_text_udf(col(cleaned_col)))
+        logger.info(f"Processed {text_column} for note-level embeddings.")
+
+    # Group by subject_id and aggregate embeddings using element-wise averaging
+    # It is assumed that each subject_id may have multiple notes; we average the embeddings to produce one patient-level embedding per column.
+    aggregated_df = notes_df.groupBy('subject_id').agg(
+        avg_embedding_udf(col('embedding_radiology_text')).alias('embedded_radiology_text'),
+        avg_embedding_udf(col('embedding_discharge_text')).alias('embedded_discharge_text')
+    )
+
+    logger.info("Aggregation to patient-level embeddings complete.")
+
+    # Write the result as a parquet file with snappy compression
+    aggregated_df.write.mode("overwrite").option("compression", "snappy").parquet(output_path)
+    logger.info(f"Results written to {output_path}")
     spark.stop()
-    logger.info(f"Results written to {f"{text_column}/{output_path}"}")
 
 # ----------------------
 # Main Function
@@ -246,11 +264,8 @@ def main():
     logger.info(f"Input path: {input_path}")
     logger.info(f"Output path: {output_path}")
     
-    text_columns = ['radiology_text', 'discharge_text']
-    for text_column in text_columns:
-        logger.info(f"Processing text column: {text_column}")
-        process_notes_spark(input_path, output_path, text_column)
-    logger.info(f"SUCCESS: Processing complete for columns '{text_columns}'.")
+    process_notes_spark(input_path, output_path)
+    logger.info("SUCCESS: Patient-level embedding processing complete.")
 
 if __name__ == "__main__":
     main()
