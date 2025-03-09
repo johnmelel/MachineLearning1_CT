@@ -833,58 +833,66 @@ order by 3 desc, 2 desc;
 --create a new db
 
 --final patient table
+DROP TABLE IF EXISTS ml1_project_clean.patients;
 CREATE TABLE ml1_project_clean.patients AS
 SELECT a.subject_id, a.gender, a.anchor_age, a.anchor_year,
 b.insurance, b.language, b.marital_status, b.race,
 c.blood_pressure_systolic, c.blood_pressure_diastolic, c.bmi, c.height, c.weight, c.egfr
 FROM ml1_project.p01_patients a
-left join ml1_project.p01_patients_admissions b
+left join (SELECT subject_id, MAX(insurance) as insurance, MAX(language) as language, MAX(marital_status) as marital_status, MAX(race) as race from ml1_project.p01_patients_admissions group by 1) b
 on a.subject_id = b.subject_id
 left join ml1_project.p04_patients_omr c
 on a.subject_id = c.subject_id
 WHERE a.subject_id is not null and b.subject_id is not null and c.subject_id is not null and a.subject_id != '' and b.subject_id != '' and c.subject_id != ''
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
 
+DROP TABLE IF EXISTS ml1_project_clean.diagnoses_icd;
 CREATE TABLE ml1_project_clean.diagnoses_icd AS
 SELECT A.*
 FROM ml1_project.diagnoses_icd A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.procedures_icd;
 CREATE TABLE ml1_project_clean.procedures_icd AS
 SELECT A.*
 FROM ml1_project.procedures_icd A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.drgcodes;
 CREATE TABLE ml1_project_clean.drgcodes AS
 SELECT A.*
 FROM ml1_project.p01_drgcodes A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.hcpcsevents;
 CREATE TABLE ml1_project_clean.hcpcsevents AS
 SELECT A.*
 FROM ml1_project.p01_hcpcsevents A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.emar;
 CREATE TABLE ml1_project_clean.emar AS
 SELECT A.*
 FROM ml1_project.p01_emar A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.pharmacy;
 CREATE TABLE ml1_project_clean.pharmacy AS
 SELECT A.*
 FROM ml1_project.p01_pharmacy A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.prescriptions;
 CREATE TABLE ml1_project_clean.prescriptions AS
 SELECT A.*
 FROM ml1_project.p01_prescriptions A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
 CREATE TABLE ml1_project_clean.d_icd_diagnoses AS
@@ -895,22 +903,25 @@ CREATE TABLE ml1_project_clean.d_icd_procedures AS
 SELECT A.*
 FROM ml1_project.d_icd_procedures A;
 
+DROP TABLE IF EXISTS ml1_project_clean.discharge;
 CREATE TABLE ml1_project_clean.discharge AS
 SELECT A.subject_id, A.hadm_id, A.charttime, replace(replace(A.text, '|',''),'"','') as text
 FROM ml1_project.p01_discharge A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.radiology;
 CREATE TABLE ml1_project_clean.radiology AS
 SELECT A.subject_id, A.hadm_id, A.charttime, replace(replace(A.text, '|',''),'"','') as text
 FROM ml1_project.p01_radiology A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
+DROP TABLE IF EXISTS ml1_project_clean.services;
 CREATE TABLE ml1_project_clean.services AS
 SELECT A.*
 FROM ml1_project.p01_services A
-INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients) B
+INNER JOIN (SELECT subject_id FROM ml1_project_clean.patients GROUP BY 1) B
 ON A.subject_id = B.subject_id;
 
 --admissions            Combined to patients
