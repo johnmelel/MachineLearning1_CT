@@ -52,7 +52,7 @@ logger = logging.getLogger(__name__)
 # ----------------------
 # Device Selection
 # ----------------------
-DEVICE = torch.device("mps")
+DEVICE = torch.device("cpu")
 logger.info(f"Using device: {DEVICE}")
 
 # ----------------------
