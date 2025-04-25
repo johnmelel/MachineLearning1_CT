@@ -64,13 +64,6 @@ NLP Work:
 Clustering Work:
 - Clustering work is to find patients that are most alike to each patient in the dataset. View the clusters to see if there are any patterns in the data.
 
-TODO: 
-- John: eda, study criteria, dataset curation, data mapping
-- Michael: qualification patient dataset, golden patient selection, and clustering of patients ()
-- Sagana: Data pipeline, feature extraction from nlp, data standardization 
-- Yeochan: NLP embeddings and clustering work
-- Kanav: Data pipeline, feature extraction from nlp, data standardization 
-
 
 ## Dataset Column Names Mapping:
 - hadm_ID -> Hospital Admission ID
